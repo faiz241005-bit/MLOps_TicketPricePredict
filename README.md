@@ -4,7 +4,7 @@
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
 </a>
 
-Sistem prediksi fluktuasi harga tiket pesawat
+Proyek ini bertujuan membangun sistem prediksi harga tiket pesawat yang membantu pengguna memutuskan apakah harus membeli sekarang atau menunggu harga lebih murah
 
 ## Project Organization
 
@@ -12,6 +12,7 @@ Sistem prediksi fluktuasi harga tiket pesawat
 ├── LICENSE            <- Open-source license if one is chosen
 ├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
 ├── README.md          <- The top-level README for developers using this project.
+├── .devcontainer      <- Enviroment Configuration for GitHub Codespace
 ├── data
 │   ├── external       <- Data from third party sources.
 │   ├── interim        <- Intermediate data that has been transformed.
@@ -39,7 +40,7 @@ Sistem prediksi fluktuasi harga tiket pesawat
 │
 ├── setup.cfg          <- Configuration file for flake8
 │
-└── Muhamad Faiz Al Akbar   <- Source code for use in this project.
+└── src   <- Source code for use in this project.
     │
     ├── __init__.py             <- Makes Muhamad Faiz Al Akbar a Python module
     │
@@ -54,8 +55,21 @@ Sistem prediksi fluktuasi harga tiket pesawat
     │   ├── predict.py          <- Code to run model inference with trained models          
     │   └── train.py            <- Code to train models
     │
-    └── plots.py                <- Code to create visualizations
+    └── plots.py                <- Code to create visualizations               
 ```
 
 --------
+## Cara Menjalankan di Codespaces
 
+1. Buka halaman repositori GitHub proyek ini.
+2. Klik tombol Code.
+3. Pilih tab Codespaces.
+4. Klik Create Codespace on main.
+5. Tunggu hingga lingkungan pengembangan selesai dibuat.
+
+Setelah Codespaces aktif, semua dependency akan terinstal secara otomatis dan proyek siap digunakan.
+
+*Nama:* Muhamad Fa'iz Al Akbar  
+*NIM:* 235150201111010  
+*Mata Kuliah:* Machine Learning Operations (Kelas B)
+--------
