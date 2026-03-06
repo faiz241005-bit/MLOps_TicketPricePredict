@@ -1,0 +1,23 @@
+cat > config/model_config.yaml << 'EOF'
+model:
+  name: xgboost_classifier
+  version: "1.0"
+  threshold_accuracy: 0.65
+
+training:
+  schedule: "weekly"
+  lookback_days: 90
+  test_size: 0.2
+  random_state: 42
+
+data:
+  update_frequency_hours: 24
+  routes:
+    - "Jakarta-Bali"
+    - "Jakarta-Surabaya"
+
+monitoring:
+  min_accuracy: 0.65
+  alert_consecutive_days: 2
+  latency_max_ms: 200
+EOF

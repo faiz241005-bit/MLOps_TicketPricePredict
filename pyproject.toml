@@ -1,0 +1,32 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "Muhamad Faiz Al Akbar"
+version = "0.0.1"
+description = "Sistem prediksi fluktuasi harga tiket pesawat"
+authors = [
+  { name = "Muhamad Faiz Al Akbar" },
+]
+license = { file = "LICENSE" }
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License"
+]
+requires-python = "~=3.10.0"
+
+
+[tool.ruff]
+line-length = 99
+src = ["Muhamad Faiz Al Akbar"]
+include = ["pyproject.toml", "Muhamad Faiz Al Akbar/**/*.py"]
+
+[tool.ruff.lint]
+extend-select = ["I"]  # Add import sorting
+
+[tool.ruff.lint.isort]
+known-first-party = ["Muhamad Faiz Al Akbar"]
+force-sort-within-sections = true
+
