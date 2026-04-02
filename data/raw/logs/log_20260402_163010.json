@@ -1,0 +1,15 @@
+{
+  "ingest_timestamp": "20260402_163010",
+  "source_file": "data/raw/tiketcom_bestprice.csv",
+  "output_file": "data/raw/tiketcom_20260402.csv",
+  "total_rows": 45438,
+  "columns": [
+    "extract_timestamp",
+    "origin",
+    "destination",
+    "depart_date",
+    "best_price",
+    "ingest_timestamp"
+  ],
+  "status": "success"
+}
