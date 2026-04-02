@@ -73,3 +73,22 @@ Setelah Codespaces aktif, semua dependency akan terinstal secara otomatis dan pr
 *NIM:* 235150201111010  
 *Mata Kuliah:* Machine Learning Operations (Kelas B)
 --------
+
+## Cara Menjalankan Pipeline Data
+
+### 1. Ingestion Data
+Mengambil data terbaru dan menyimpan ke `data/raw/`:
+```bash
+python src/data/ingest_data.py
+```
+
+### 2. Preprocessing Data
+Membersihkan data dan membuat fitur, output ke `data/processed/`:
+```bash
+python src/data/preprocess.py
+```
+
+### 3. Jalankan Keduanya Sekaligus
+```bash
+python src/data/ingest_data.py && python src/data/preprocess.py
+```
