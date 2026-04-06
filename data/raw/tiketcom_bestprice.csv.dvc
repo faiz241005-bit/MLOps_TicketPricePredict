@@ -1,0 +1,5 @@
+outs:
+- md5: 6f563c867ee2649a66f2485aaaadc1e8
+  size: 2568448
+  hash: md5
+  path: tiketcom_bestprice.csv
