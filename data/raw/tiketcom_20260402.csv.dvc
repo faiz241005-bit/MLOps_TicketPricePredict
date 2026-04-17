@@ -1,0 +1,5 @@
+outs:
+- md5: 757d482a1dcdba780bb155bf1810e47a
+  size: 3477184
+  hash: md5
+  path: tiketcom_20260402.csv
