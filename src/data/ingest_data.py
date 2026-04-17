@@ -17,48 +17,35 @@ def ingest_data():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output    = f"{RAW_DATA_DIR}/tiketcom_{today}.csv"
 
-    # Cek apakah data hari ini sudah ada
-    if os.path.exists(output):
-        print(f"[INGEST] Data hari ini sudah ada: {output}")
-        print(f"[INGEST] Melewati proses ingestion.")
-        return output
-
-    # Cek apakah file sumber tersedia
     if not os.path.exists(RAW_DATA_SOURCE):
         print(f"[ERROR] File sumber tidak ditemukan: {RAW_DATA_SOURCE}")
-        print(f"[INFO]  Pastikan tiketcom_bestprice.csv ada di folder data/raw/")
         return None
 
     # Load data asli
     df = pd.read_csv(RAW_DATA_SOURCE, sep='|')
-
-    # Simulasi variasi harga harian (noise kecil)
-    np.random.seed(int(today))
+    
+    # Random seed berdasarkan jam agar selalu berbeda tiap kali dijalankan
+    np.random.seed(int(datetime.now().timestamp()))
     noise = np.random.uniform(-0.03, 0.03, len(df))
     df['best_price'] = df['best_price'] * (1 + noise)
     df['best_price'] = df['best_price'].round(0)
-
-    # Tambahkan timestamp pengambilan data
     df['ingest_timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # Simpan
-    df.to_csv(output, index=False)
-    print(f"[INGEST] ✅ Data berhasil disimpan: {output}")
-    print(f"[INGEST] Jumlah baris: {len(df)}")
+    # SIMULASI CONTINUAL LEARNING: Jika file sudah ada, tambahkan data ke dalamnya
+    if os.path.exists(output):
+        print(f"[INGEST] File hari ini sudah ada. Melakukan Continual Learning (Append data baru)...")
+        # Ambil 50 baris acak sebagai data baru yang masuk
+        new_data = df.sample(n=50) 
+        # Gabungkan data lama dengan data baru
+        existing_df = pd.read_csv(output)
+        df_final = pd.concat([existing_df, new_data], ignore_index=True)
+    else:
+        df_final = df
 
-    # Simpan log metadata
-    log = {
-        "ingest_timestamp" : timestamp,
-        "source_file"      : RAW_DATA_SOURCE,
-        "output_file"      : output,
-        "total_rows"       : len(df),
-        "columns"          : list(df.columns),
-        "status"           : "success"
-    }
-    log_path = f"{LOG_DIR}/log_{timestamp}.json"
-    with open(log_path, 'w') as f:
-        json.dump(log, f, indent=2)
-    print(f"[INGEST] Log tersimpan: {log_path}")
+    # Simpan
+    df_final.to_csv(output, index=False)
+    print(f"[INGEST] ✅ Data berhasil disimpan: {output}")
+    print(f"[INGEST] Jumlah baris saat ini: {len(df_final)}")
 
     return output
 
