@@ -88,46 +88,46 @@ Membersihkan data dan membuat fitur, output ke `data/processed/`:
 python src/data/preprocess.py
 ```
 
-### 3. Jalankan Keduanya Sekaligus
+### 3. Pelatihan Model (Training)
+Melatih model dengan tracking eksperimen MLflow:
 ```bash
-python src/data/ingest_data.py && python src/data/preprocess.py
+python src/modeling/train.py
 ```
 
 --------
 
-## Manajemen Versi Data & Continual Learning (DVC)
+## Manajemen Versi Data (DVC)
 
-Proyek ini menerapkan *Continuous Training* untuk beradaptasi dengan fluktuasi harga tiket pesawat yang sangat dinamis. Agar repositori Git tetap ringan dan tidak terbebani file biner berukuran besar, pengelolaan dan pelacakan versi dataset dilakukan menggunakan **DVC (Data Version Control)** yang terintegrasi dengan Google Drive sebagai *remote storage*.
+Proyek ini menggunakan **DVC (Data Version Control)** dengan Google Drive sebagai *remote storage* untuk mengelola dataset secara efisien.
 
-Berikut adalah alur kerja untuk menyimulasikan masuknya data harian baru dan melacak transisi versinya (Sesuai dengan LK-05):
+**Alur Kerja DVC:**
+1. Ingest data harian baru ke `data/raw/`.
+2. Lacak perubahan dengan: `dvc add data/raw/[nama_file].csv`.
+3. Audit silsilah versi dengan: `dvc diff HEAD~1`.
+4. Unggah data fisik ke cloud: `dvc push`.
 
-### 1. Ingesti Data Baru (Simulasi Continual Learning)
-Jalankan skrip ingestion untuk menarik sekumpulan data harga tiket terbaru. Sistem akan mendeteksi dan menambahkan data (append) ke dalam folder `data/raw/`.
-```bash
-python src/data/ingest_data.py
-```
+--------
 
-### 2. Pelacakan Data Baru (Versioning)
-Gunakan DVC untuk melacak file dataset yang baru saja diperbarui. DVC akan menghitung *hash value* baru untuk mencatat versi spesifik dari data tersebut.
-```bash
-dvc add data/raw/tiketcom_YYYYMMDD.csv
-```
+## Manajemen Eksperimen & Model Metadata (MLflow)
 
-### 3. Audit dan Diff Metadata
-Lakukan pengecekan silsilah perubahan data untuk memverifikasi bahwa DVC mengenali adanya ukuran file atau entitas baru yang ditambahkan dibandingkan versi sebelumnya.
-```bash
-dvc diff HEAD~1
-```
+Proyek ini mengintegrasikan **MLflow** untuk manajemen eksperimen dan pelacakan model. Setiap iterasi pelatihan dicatat untuk membandingkan pengaruh *hyperparameter* terhadap performa model.
 
-### 4. Simpan Riwayat ke Git
-File dataset fisik dikelola oleh DVC, sementara file metadata/penunjuk (`.dvc`) disimpan ke dalam Git agar riwayat versi data selalu sinkron dengan versi kode (*codebase*).
-```bash
-git add data/raw/tiketcom_YYYYMMDD.csv.dvc
-git commit -m "track: penambahan data batch harian untuk continual learning"
-```
+### Dokumentasi Parameter Terbaik (Best Model for Deployment)
 
-### 5. Unggah ke Remote Storage
-Dorong data fisik asli dengan aman ke Google Drive untuk menghemat kapasitas ruang kerja lokal.
-```bash
-dvc push
-```
+Berdasarkan hasil eksperimen *hyperparameter tuning* menggunakan algoritma **XGBoost Classifier**, berikut adalah metadata model terbaik yang dipilih untuk tahap *deployment* berikutnya:
+
+| Parameter | Nilai Terbaik |
+| :--- | :--- |
+| **Algorithm** | XGBoost Classifier |
+| **n_estimators** | 100 |
+| **learning_rate** | 0.05 |
+| **max_depth** | 5 |
+
+**Metrik Performa:**
+* **Accuracy:** ~0.88
+* **F1-Score:** ~0.86
+
+**Ringkasan Analisis:**
+Model dengan 100 estimator (`n_estimators`) dan *learning rate* 0.05 dipilih karena memberikan keseimbangan optimal antara akurasi dan generalisasi. Penambahan jumlah estimator hingga 200 terdeteksi menyebabkan *overfitting*, ditandai dengan penurunan metrik pada data uji. Artefak model ini (file `.xgb` dan metadata `MLmodel`) telah terekam secara otomatis di dalam direktori `mlruns/` dan siap untuk tahap *serving*.
+
+--------
