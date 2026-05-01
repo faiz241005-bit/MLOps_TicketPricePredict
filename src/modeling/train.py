@@ -69,13 +69,13 @@ if __name__ == "__main__":
     DATASET_PATH = "data/processed/tiketcom_20260402_feat.csv" 
     
     print("="*50)
-    print("MEMULAI EKSEKUSI 3 VARIASI EKSPERIMEN MLFLOW")
+    print("MEMULAI EKSEKUSI EKSPERIMEN BARU (VERSIONING LK-07)")
     print("="*50)
 
+    # Menjalankan 1 eksperimen baru dengan parameter yang SEDIKIT berbeda
+    # dari model terbaik sebelumnya (sebelumnya n_estimators=100, lr=0.05, max_depth=5)
     eksperimen_variasi = [
-        {"n_estimators": 50, "learning_rate": 0.1, "max_depth": 3},   # Run 1: Ringan
-        {"n_estimators": 100, "learning_rate": 0.05, "max_depth": 5}, # Run 2: Sedang
-        {"n_estimators": 200, "learning_rate": 0.01, "max_depth": 7}  # Run 3: Kompleks
+        {"n_estimators": 120, "learning_rate": 0.04, "max_depth": 5}  # Parameter modifikasi (v2)
     ]
 
     for params in eksperimen_variasi:
@@ -86,4 +86,4 @@ if __name__ == "__main__":
             max_depth=params["max_depth"]
         )
     
-    print("\n Pelatihan selesai! Jalankan 'mlflow ui' di terminal untuk melihat hasilnya.")
+    print("\nPelatihan selesai! Buka MLflow UI untuk mendaftarkan model ini sebagai Versi 2.")

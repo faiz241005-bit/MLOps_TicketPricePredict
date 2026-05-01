@@ -131,3 +131,16 @@ Berdasarkan hasil eksperimen *hyperparameter tuning* menggunakan algoritma **XGB
 Model dengan 100 estimator (`n_estimators`) dan *learning rate* 0.05 dipilih karena memberikan keseimbangan optimal antara akurasi dan generalisasi. Penambahan jumlah estimator hingga 200 terdeteksi menyebabkan *overfitting*, ditandai dengan penurunan metrik pada data uji. Artefak model ini (file `.xgb` dan metadata `MLmodel`) telah terekam secara otomatis di dalam direktori `mlruns/` dan siap untuk tahap *serving*.
 
 --------
+## Model Lifecycle & Inference
+
+Sistem saat ini menggunakan **MLflow Model Registry** untuk mengelola versi model yang siap digunakan untuk prediksi harga tiket.
+
+**Status Model Aktif:**
+- **Nama Model:** `Flight_Price_XGBoost_Model`
+- **Versi Aktif:** Version 1
+- **Stage:** `Production`
+- **Alasan Pemilihan:** Berdasarkan hasil eksperimen LK-06, versi ini memiliki F1-Score tertinggi (0.86) dan tingkat generalisasi paling stabil pada data uji.
+
+**Cara Memanggil Model untuk Inferensi:**
+Model dapat dimuat secara programatik menggunakan MLflow URI:
+`mlflow.pyfunc.load_model(model_uri="models:/Flight_Price_XGBoost_Model/Production")`
