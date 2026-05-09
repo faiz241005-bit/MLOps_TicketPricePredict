@@ -188,3 +188,4 @@ cython_debug/
 .pypirc
 mlops-dvc-493502-0a02fb3c39d4.json
 /model_metadata.yaml
+mlruns/
