@@ -32,5 +32,9 @@ jobs:
 
     - name: 5. Tahap 2, 3, 4 - Automated Training & Evaluasi
       run: |
+        # Hapus sisa-sisa folder atau database MLflow lama yang terbawa dari GitHub
+        rm -rf mlruns/
+        rm -f *.db
+        
         # Skrip ini akan melatih model, mengecek threshold, dan auto-register ke Staging
         python src/modeling/train.py
