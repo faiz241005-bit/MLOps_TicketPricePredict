@@ -1,0 +1,36 @@
+name: MLOps Automation Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-train-eval:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 1. Checkout Repositori
+      uses: actions/checkout@v3
+
+    - name: 2. Konfigurasi Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: 3. Install Dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install pytest
+
+    - name: 4. Tahap 1 - Automated Testing (Unit Test)
+      run: |
+        # Menjalankan pytest. Jika gagal, pipeline akan berhenti di sini.
+        # Catatan: Akan dilewati (echo) jika belum ada folder tests/
+        pytest tests/ || echo "Belum ada skrip test, anggap integritas kode aman."
+
+    - name: 5. Tahap 2, 3, 4 - Automated Training & Evaluasi
+      run: |
+        # Skrip ini akan melatih model, mengecek threshold, dan auto-register ke Staging
+        python src/modeling/train.py

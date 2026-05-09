@@ -44,7 +44,7 @@ def ingest_data():
 
     # Simpan
     df_final.to_csv(output, index=False)
-    print(f"[INGEST] ✅ Data berhasil disimpan: {output}")
+    print(f"[INGEST] Data berhasil disimpan: {output}")
     print(f"[INGEST] Jumlah baris saat ini: {len(df_final)}")
 
     return output

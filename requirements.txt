@@ -10,8 +10,6 @@ pytest
 python-dotenv
 ruff
 scikit-learn
-tqdm
-typer
 xgboost
 mlflow
 -e .

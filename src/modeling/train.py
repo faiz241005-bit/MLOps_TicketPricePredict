@@ -65,17 +65,40 @@ def train_model(data_path, n_estimators, learning_rate, max_depth):
         # LOGGING MODEL
         mlflow.xgboost.log_model(model, "xgboost_flight_model")
 
+        # TAHAP 3 & 4: EVALUASI OTOMATIS & AUTO-REGISTRY
+        THRESHOLD_F1 = 0.80 # Ambang batas performa minimal (LK-01)
+        model_name = "Flight_Price_XGBoost_Model"
+
+        if f1 >= THRESHOLD_F1:
+            print(f" Evaluasi Sukses: F1-Score ({f1:.4f}) memenuhi threshold ({THRESHOLD_F1}).")
+            print(f"Mendaftarkan model ke Registry dengan status 'Staging'...")
+            
+            # Daftarkan ke Registry
+            model_uri = f"runs:/{mlflow.active_run().info.run_id}/xgboost_flight_model"
+            registered_model = mlflow.register_model(model_uri, model_name)
+            
+            # Pindahkan ke Staging menggunakan client MLflow
+            client = mlflow.tracking.MlflowClient()
+            client.transition_model_version_stage(
+                name=model_name,
+                version=registered_model.version,
+                stage="Staging"
+            )
+            print(" Model berhasil masuk ke tahap Staging!")
+        else:
+            print(f" Evaluasi Gagal: F1-Score ({f1:.4f}) di bawah threshold ({THRESHOLD_F1}). Model diabaikan.")
+
 if __name__ == "__main__":
     DATASET_PATH = "data/processed/tiketcom_20260402_feat.csv" 
     
     print("="*50)
-    print("MEMULAI EKSEKUSI EKSPERIMEN BARU (VERSIONING LK-07)")
+    print("MEMULAI EKSEKUSI EKSPERIMEN BARU ")
     print("="*50)
 
     # Menjalankan 1 eksperimen baru dengan parameter yang SEDIKIT berbeda
     # dari model terbaik sebelumnya (sebelumnya n_estimators=100, lr=0.05, max_depth=5)
     eksperimen_variasi = [
-        {"n_estimators": 120, "learning_rate": 0.04, "max_depth": 5}  # Parameter modifikasi (v2)
+        {"n_estimators": 130, "learning_rate": 0.05, "max_depth": 5}  # Parameter modifikasi (v2)
     ]
 
     for params in eksperimen_variasi:
@@ -86,4 +109,3 @@ if __name__ == "__main__":
             max_depth=params["max_depth"]
         )
     
-    print("\nPelatihan selesai! Buka MLflow UI untuk mendaftarkan model ini sebagai Versi 2.")
